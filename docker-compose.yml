@@ -1,0 +1,28 @@
+services:
+  chroma:
+    image: chromadb/chroma:latest
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./chroma_db:/chroma/chroma
+
+  backend:
+    image: python:3.11-slim
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
+    volumes:
+      - ./backend:/app
+    command: >
+      bash -lc "pip install --no-cache-dir -r requirements.txt --break-system-packages
+      && uvicorn main:app --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - chroma
+
+# Commit message suggestion:
+#   "Add docker-compose for backend + ChromaDB"
