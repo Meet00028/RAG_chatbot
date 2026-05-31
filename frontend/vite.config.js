@@ -3,11 +3,11 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const backendUrl = env.BACKEND_URL;
+  const backendUrl = env.VITE_BACKEND_URL || "http://localhost:8000";
 
   if (!backendUrl) {
     throw new Error(
-      "BACKEND_URL is not set. Create a .env file (see .env.example at repo root) and set BACKEND_URL."
+      "VITE_BACKEND_URL is not set. Create a .env file (see .env.example at repo root) and set VITE_BACKEND_URL."
     );
   }
 
