@@ -1,0 +1,31 @@
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+python-dotenv>=1.0.1
+typing-extensions>=4.10.0
+
+# RAG / orchestration
+langgraph>=0.2.0
+langchain-core>=0.3.0
+langchain-openai>=0.2.0
+
+# Vector DB
+chromadb>=0.5.0
+
+# OpenAI API (embeddings)
+openai>=1.40.0
+
+# Tokenization for chunking
+tiktoken>=0.7.0
+
+# Whisper + torch are sensitive to NumPy 2.x ABI changes; pinning avoids
+# hard-to-debug runtime crashes in production containers.
+numpy<2
+
+# Transcript + metadata ingestion
+youtube-transcript-api>=0.6.2
+yt-dlp>=2024.7.0
+openai-whisper>=20231117
+torch>=2.9.0
+
+# Reliability / utils
+tenacity>=8.2.3
