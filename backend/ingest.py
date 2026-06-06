@@ -82,10 +82,11 @@ def _ensure_whisper_model() -> Any:
     """
     Whisper model load is slow; caching it at module-level prevents per-request
     reloads that would destroy latency under concurrent creators.
+    Use "tiny" model for free tiers with limited RAM!
     """
     global _WHISPER_MODEL
     if _WHISPER_MODEL is None:
-        _WHISPER_MODEL = whisper.load_model("base")
+        _WHISPER_MODEL = whisper.load_model("tiny")
     return _WHISPER_MODEL
 
 
