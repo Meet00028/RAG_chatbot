@@ -43,7 +43,7 @@ function App() {
         marginBottom: 16
       },
       inputs: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 },
-      label: { color: "#cbd5e1", fontSize: 12, marginBottom: 6, display: "block" },
+      label: { color: "#cbd5e1", fontSize: 12, marginBottom: 6, display: "flex", flexDirection: "column", gap: 6 },
       input: {
         width: "100%",
         padding: "10px 12px",
@@ -113,24 +113,28 @@ function App() {
         <div style={styles.panel}>
           <div style={styles.inputs}>
             <div>
-              <label style={styles.label}>Video A URL (YouTube)</label>
-              <input
-                style={styles.input}
-                value={urlA}
-                onChange={(e) => setUrlA(e.target.value)}
-                placeholder="https://www.youtube.com/watch?v=..."
-                disabled={isIngesting}
-              />
+              <label style={styles.label}>
+                Video A URL (YouTube)
+                <input
+                  style={styles.input}
+                  value={urlA}
+                  onChange={(e) => setUrlA(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  disabled={isIngesting}
+                />
+              </label>
             </div>
             <div>
-              <label style={styles.label}>Video B URL (Instagram Reel)</label>
-              <input
-                style={styles.input}
-                value={urlB}
-                onChange={(e) => setUrlB(e.target.value)}
-                placeholder="https://www.instagram.com/reel/..."
-                disabled={isIngesting}
-              />
+              <label style={styles.label}>
+                Video B URL (Instagram Reel)
+                <input
+                  style={styles.input}
+                  value={urlB}
+                  onChange={(e) => setUrlB(e.target.value)}
+                  placeholder="https://www.instagram.com/reel/..."
+                  disabled={isIngesting}
+                />
+              </label>
             </div>
           </div>
 
