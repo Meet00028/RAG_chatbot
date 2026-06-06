@@ -15,7 +15,6 @@ class TestApiIngest:
     async def test_ingest_valid_urls(self, async_client, mock_youtube_transcript, mock_yt_dlp_json, mock_openai_embeddings):
         """Test POST /ingest with valid URLs returns 200 and valid session_id."""
         with patch("main.ingest") as mock_ingest:
-            from models import IngestResponse, VideoMetadata
             mock_meta = {
                 "video_a": {
                     "video_id": "A",

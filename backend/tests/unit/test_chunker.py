@@ -5,7 +5,6 @@ from typing import Dict, Any, List
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import tiktoken
-import ingest
 
 
 def _chunk_text(text: str, chunk_tokens: int = 300, overlap_tokens: int = 50) -> List[str]:

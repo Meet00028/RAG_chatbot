@@ -45,7 +45,7 @@ class TestRetriever:
     @pytest.mark.integration
     def test_retrieve_special_chars(self, sample_ingested_videos, temp_chroma_collection, mock_retriever_embeddings):
         """Test retrieve with special characters in query doesn't crash."""
-        results = retriever.retrieve("test! @#$%^&*()", video_ids=["A", "B"])
+        retriever.retrieve("test! @#$%^&*()", video_ids=["A", "B"])
         # Just verify no crash
         assert True
 

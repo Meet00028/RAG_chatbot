@@ -1,6 +1,6 @@
 import sys
 import os
-from unittest.mock import patch, AsyncMock
+from unittest.mock import patch
 import pytest
 import uuid
 

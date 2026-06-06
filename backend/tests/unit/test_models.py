@@ -1,10 +1,11 @@
 import sys
 import os
+import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from pydantic import ValidationError
-from models import IngestRequest, VideoMetadata, IngestResponse, HealthResponse, RetrievalChunk
+from models import IngestRequest, VideoMetadata, HealthResponse, RetrievalChunk
 
 
 class TestIngestRequest:
@@ -105,6 +106,3 @@ class TestRetrievalChunk:
             distance=0.5,
         )
         assert chunk is not None
-
-
-import pytest

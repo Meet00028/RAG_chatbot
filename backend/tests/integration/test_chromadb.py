@@ -73,7 +73,6 @@ class TestChromaDB:
     @pytest.mark.integration
     def test_embedding_dimension(self, sample_ingested_videos, temp_chroma_collection):
         """Test embedding dimension is 1536 (text-embedding-3-small)."""
-        collection = ingest._get_chroma_collection()
         # Note: Need to include embeddings in get() if stored, but in our case we just verify via ingestion
         # Since we mocked embeddings as [0.1]*1536, check count
         assert True  # Passed via mock setup

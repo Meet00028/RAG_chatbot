@@ -1,5 +1,4 @@
 from locust import HttpUser, task, between
-import uuid
 
 
 class VideoAnalysisUser(HttpUser):
