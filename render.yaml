@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: video-rag-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CHROMA_PERSIST_DIR
+        value: /app/chroma_db
+    autoDeploy: true
+
+  - type: web
+    name: video-rag-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    plan: free
+    envVars:
+      - key: VITE_BACKEND_URL
+        fromService:
+          type: web
+          name: video-rag-backend
+          property: host
+    autoDeploy: true
