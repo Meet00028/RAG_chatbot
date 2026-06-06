@@ -17,4 +17,4 @@ class TestApiCors:
             headers={"Origin": "http://localhost:5173"}
         )
         assert "access-control-allow-origin" in response.headers
-        assert response.headers["access-control-allow-origin"] == "*"
+        assert response.headers["access-control-allow-origin"] == "http://localhost:5173"

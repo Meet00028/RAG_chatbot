@@ -12,7 +12,7 @@ class TestApiIngest:
 
     @pytest.mark.api
     @pytest.mark.asyncio
-    async def test_ingest_valid_urls(self, async_client, mock_youtube_transcript, mock_yt_dlp_json, mock_openai_embeddings):
+    async def test_ingest_valid_urls(self, async_client):
         """Test POST /ingest with valid URLs returns 200 and valid session_id."""
         with patch("main.ingest") as mock_ingest:
             mock_meta = {
