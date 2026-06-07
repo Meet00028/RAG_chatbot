@@ -93,22 +93,61 @@ def _ensure_whisper_model() -> Any:
 def _youtube_transcript_text(url: str) -> str:
     video_id = _extract_youtube_video_id(url)
     try:
-        # youtube-transcript-api v1+ moved away from static/class methods and
-        # intentionally requires an instance (it owns a requests.Session and is
-        # not thread-safe). Creating it per call avoids cross-request leakage.
+        # Try YouTubeTranscriptApi first
         fetched = YouTubeTranscriptApi().fetch(video_id)
-    except Exception as e:
-        raise RuntimeError(f"Failed to fetch YouTube transcript: {e}") from e
+        text_parts: List[str] = []
+        for snippet in fetched:
+            t = safe_str(getattr(snippet, "text", ""), default="").strip()
+            if t:
+                text_parts.append(t)
+        transcript_text = " ".join(text_parts).strip()
+        if transcript_text:
+            return transcript_text
+    except Exception:
+        # If transcript API fails, fall back to yt-dlp + Whisper
+        pass
 
-    text_parts: List[str] = []
-    for snippet in fetched:
-        t = safe_str(getattr(snippet, "text", ""), default="").strip()
-        if t:
-            text_parts.append(t)
-    transcript_text = " ".join(text_parts).strip()
-    if not transcript_text:
-        raise RuntimeError("YouTube transcript returned empty text")
-    return transcript_text
+    # Fallback: download audio and transcribe with Whisper
+    with tempfile.TemporaryDirectory() as tmpdir:
+        outtmpl = str(Path(tmpdir) / "audio.%(ext)s")
+        cmd = [
+            "yt-dlp",
+            "--no-warnings",
+            "--no-playlist",
+            "-f",
+            "bestaudio/best",
+            "-x",
+            "--audio-format",
+            "mp3",
+            "-o",
+            outtmpl,
+            url,
+        ]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        except Exception as e:
+            raise RuntimeError(f"yt-dlp audio download failed to execute: {e}") from e
+
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"yt-dlp audio download error ({proc.returncode}): {proc.stderr.strip()}"
+            )
+
+        audio_files = list(Path(tmpdir).glob("audio.*"))
+        if not audio_files:
+            raise RuntimeError("yt-dlp audio download produced no file")
+
+        audio_path = str(audio_files[0])
+        try:
+            model = _ensure_whisper_model()
+            result = model.transcribe(audio_path)
+        except Exception as e:
+            raise RuntimeError(f"Whisper transcription failed: {e}") from e
+
+        transcript_text = safe_str(result.get("text"), default="").strip()
+        if not transcript_text:
+            raise RuntimeError("Whisper returned empty transcript")
+        return transcript_text
 
 
 def _instagram_transcript_text(url: str) -> str:
