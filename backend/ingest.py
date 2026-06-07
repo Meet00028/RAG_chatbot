@@ -64,6 +64,9 @@ def _run_yt_dlp_json(url: str) -> Dict[str, Any]:
     process and capture stdout/stderr for good operator debugging.
     """
     cmd = ["yt-dlp", "-J", "--no-warnings", "--no-playlist", "--skip-download", url]
+    cookies_file = os.getenv("YT_DLP_COOKIES_FILE")
+    if cookies_file and os.path.exists(cookies_file):
+        cmd.extend(["--cookies", cookies_file])
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
     except Exception as e:
@@ -123,6 +126,12 @@ def _youtube_transcript_text(url: str) -> str:
             outtmpl,
             url,
         ]
+        cookies_file = os.getenv("YT_DLP_COOKIES_FILE")
+        if cookies_file and os.path.exists(cookies_file):
+            cmd.extend(["--cookies", cookies_file])
+        cookies_file = os.getenv("YT_DLP_COOKIES_FILE")
+        if cookies_file and os.path.exists(cookies_file):
+            cmd.extend(["--cookies", cookies_file])
         try:
             proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
         except Exception as e:
@@ -170,6 +179,9 @@ def _instagram_transcript_text(url: str) -> str:
             outtmpl,
             url,
         ]
+        cookies_file = os.getenv("YT_DLP_COOKIES_FILE")
+        if cookies_file and os.path.exists(cookies_file):
+            cmd.extend(["--cookies", cookies_file])
         try:
             proc = subprocess.run(cmd, capture_output=True, text=True, check=False)
         except Exception as e:
