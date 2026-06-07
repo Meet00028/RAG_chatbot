@@ -1,5 +1,7 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+
 export async function ingestVideos(urlA, urlB) {
-  const res = await fetch("/ingest", {
+  const res = await fetch(`${BACKEND_URL}/ingest`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ url_a: urlA, url_b: urlB })
@@ -15,7 +17,7 @@ export async function ingestVideos(urlA, urlB) {
 
 export function streamQuery(sessionId, query, onToken, onDone) {
   const params = new URLSearchParams({ session_id: sessionId, query });
-  const es = new EventSource(`/stream?${params.toString()}`);
+  const es = new EventSource(`${BACKEND_URL}/stream?${params.toString()}`);
 
   es.onmessage = (evt) => {
     const data = evt.data;
